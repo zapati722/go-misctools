@@ -1,0 +1,3 @@
+This is really a once-in-a-10-years use-case...
+
+Copies a big file by buffering in 1GB chunks (so you'll need more than 1GB RAM); replacing all corrupted/unreadable individual bytes (if any) with the value 0 at the destination.
