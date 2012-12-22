@@ -9,6 +9,11 @@ import (
 	uio "github.com/metaleap/go-util/io"
 )
 
+var (
+	pushToDropBox  = true
+	pushToGitRepos = true
+)
+
 func copyToDropbox() (err error) {
 	const dbp = "Dropbox/dev-go"
 	for _, dropDirPath := range []string{filepath.Join("Q:", dbp), filepath.Join(ugo.UserHomeDirPath(), dbp)} {
@@ -50,9 +55,25 @@ func copyToRepos() (err error) {
 }
 
 func main() {
-	if err := copyToDropbox(); err != nil {
-		panic(err)
-	} else if err := copyToRepos(); err != nil {
-		panic(err)
+	var err error
+	print("DropBox?... ")
+	if pushToDropBox {
+		if err = copyToDropbox(); err != nil {
+			panic(err)
+		} else {
+			println("YUP.")
+		}
+	} else {
+		println("NOPE.")
+	}
+	print("GitHub?... ")
+	if pushToGitRepos {
+		if err = copyToRepos(); err != nil {
+			panic(err)
+		} else {
+			println("YUP.")
+		}
+	} else {
+		println("NOPE.")
 	}
 }
