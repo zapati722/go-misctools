@@ -13,7 +13,8 @@ import (
 var (
 	pushToDropBox  = true
 	pushToGitRepos = true
-	dirTmpSkipper  = ustr.NewMatcher("_tmp")
+
+	dirTmpSkipper ustr.Matcher
 )
 
 func copyToDropbox() (err error) {
@@ -22,7 +23,7 @@ func copyToDropbox() (err error) {
 		if uio.DirExists(dropDirPath) {
 			if err = uio.ClearDirectory(dropDirPath); err == nil {
 				if err = uio.CopyAll(ugo.GopathSrcGithub("metaleap"), filepath.Join(dropDirPath, "metaleap"), nil); err == nil {
-					err = uio.CopyAll(ugo.GopathSrcGithub("go3d"), filepath.Join(dropDirPath, "go3d"), dirTmpSkipper)
+					err = uio.CopyAll(ugo.GopathSrcGithub("go3d"), filepath.Join(dropDirPath, "go3d"), &dirTmpSkipper)
 				}
 			}
 		}
@@ -45,7 +46,7 @@ func copyToRepos() (err error) {
 					if dirPath = filepath.Join(repoBaseDirPath, dirName); uio.DirExists(srcDirPath) {
 						if err = uio.ClearDirectory(dirPath, ".git"); err != nil {
 							return
-						} else if err = uio.CopyAll(srcDirPath, dirPath, dirTmpSkipper); err != nil {
+						} else if err = uio.CopyAll(srcDirPath, dirPath, &dirTmpSkipper); err != nil {
 							return
 						}
 					}
@@ -58,6 +59,7 @@ func copyToRepos() (err error) {
 
 func main() {
 	var err error
+	dirTmpSkipper.AddPatterns("_tmp")
 	print("DropBox?... ")
 	if pushToDropBox {
 		if err = copyToDropbox(); err != nil {
