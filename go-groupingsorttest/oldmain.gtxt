@@ -1,0 +1,80 @@
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"sort"
+	"time"
+)
+
+type entry struct {
+	//	these categories don't really need to be *ordered* ascending or descending per-se:
+	//	just clustered/grouped together hierarchically: all identical catA entries should
+	//	be together, within that cluster all identical catB entries, within that all catC.
+	catA, catB, catC int
+
+	//	only within properly grouped clusters then, sort by ordering "dist" ascending:
+	dist float64
+}
+
+type entries []entry
+
+func (me entries) Len() int {
+	return len(me)
+}
+
+func (me entries) compare(iv, jv int) (lt, eq bool) {
+	lt, eq = iv < jv, iv == jv
+	return
+}
+
+func (me entries) Less(i, j int) (lt bool) {
+	var eq bool
+	//	ensure all catA are grouped together:
+	if lt, eq = me.compare(me[i].catA, me[j].catA); eq {
+		//	ensure all catB are grouped together:
+		if lt, eq = me.compare(me[i].catB, me[j].catB); eq {
+			//	ensure all catC are grouped together:
+			if lt, eq = me.compare(me[i].catC, me[j].catC); eq {
+				//	within grouped cluster, re-order by dist ascending:
+				lt = me[i].dist < me[j].dist
+			}
+		}
+	}
+	return
+}
+
+func (me entries) Swap(i, j int) {
+	me[i], me[j] = me[j], me[i]
+}
+
+func main() {
+	rand.Seed(time.Now().UnixNano())
+	catCs := []int{0, 1}
+	catAs := []int{2, 4, 6}
+	catBs := []int{3, 5, 7}
+	dists := []float64{10, 20, 40, 80}
+	all := make(entries, 16)
+	for i := 0; i < len(all); i++ {
+		all[i].catC = catCs[rand.Intn(len(catCs))]
+		all[i].catA = catAs[rand.Intn(len(catAs))]
+		all[i].catB = catBs[rand.Intn(len(catBs))]
+		all[i].dist = dists[rand.Intn(len(dists))]
+	}
+	fmt.Println("\nUNSORTED:\n===>")
+	printAll(all, false)
+	sort.Sort(all)
+	fmt.Println("\nSORTED:\n===>")
+	printAll(all, true)
+}
+
+func printAll(all entries, sorted bool) {
+	lastA := -1
+	for i := 0; i < len(all); i++ {
+		if sorted && all[i].catA != lastA {
+			lastA = all[i].catA
+			fmt.Println("")
+		}
+		fmt.Printf("catA=%v\tcatB=%v\tcatC=%v\tdist=%v\n", all[i].catA, all[i].catB, all[i].catC, all[i].dist)
+	}
+}
