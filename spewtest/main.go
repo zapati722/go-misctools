@@ -9,6 +9,6 @@ import (
 func main() {
 	var fc u3d.FrustumCoords
 	fc.X, fc.Y = 10, 20
-	fc.BR.Set(5, 7, 9)
-	spew.Printf("%v", fc)
+	fc.BR.X, fc.BR.Y, fc.BR.Z = 5, 7, 9
+	spew.Dump(fc)
 }
