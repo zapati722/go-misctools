@@ -23,7 +23,9 @@ func copyToDropbox() (err error) {
 		if uio.DirExists(dropDirPath) {
 			if err = uio.ClearDirectory(dropDirPath); err == nil {
 				if err = uio.CopyAll(ugo.GopathSrcGithub("metaleap"), filepath.Join(dropDirPath, "metaleap"), nil); err == nil {
-					err = uio.CopyAll(ugo.GopathSrcGithub("go3d"), filepath.Join(dropDirPath, "go3d"), &dirTmpSkipper)
+					if err = uio.CopyAll(ugo.GopathSrcGithub("go3d"), filepath.Join(dropDirPath, "go3d"), &dirTmpSkipper); err == nil {
+						err = uio.CopyAll(ugo.GopathSrcGithub("ezbiz"), filepath.Join(dropDirPath, "ezbiz"), nil)
+					}
 				}
 			}
 		}
