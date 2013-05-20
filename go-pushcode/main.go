@@ -19,15 +19,17 @@ var (
 
 func copyToDropbox() (err error) {
 	const dbp = "Dropbox/dev-go"
+	dropboxDirs := []string{"metaleap", "go3d", "openbase", "prox"}
 	for _, dropDirPath := range []string{filepath.Join("Q:", dbp), filepath.Join(ugo.UserHomeDirPath(), dbp)} {
 		if uio.DirExists(dropDirPath) {
 			if err = uio.ClearDirectory(dropDirPath); err == nil {
-				if err = uio.CopyAll(ugo.GopathSrcGithub("metaleap"), filepath.Join(dropDirPath, "metaleap"), nil); err == nil {
-					if err = uio.CopyAll(ugo.GopathSrcGithub("go3d"), filepath.Join(dropDirPath, "go3d"), &dirTmpSkipper); err == nil {
-						err = uio.CopyAll(ugo.GopathSrcGithub("ezbiz"), filepath.Join(dropDirPath, "ezbiz"), nil)
+				for _, githubName := range dropboxDirs {
+					if err = uio.CopyAll(ugo.GopathSrcGithub(githubName), filepath.Join(dropDirPath, githubName), &dirTmpSkipper); err == nil {
+						break
 					}
 				}
 			}
+			break
 		}
 	}
 	return
@@ -38,12 +40,15 @@ func copyToRepos() (err error) {
 		dirName, dirPath, srcDirPath string
 		fileInfos                    []os.FileInfo
 	)
+	repoDirs := []string{"metaleap", "go3d", "openbase"}
 	for _, repoBaseDirPath := range []string{"Q:\\gitrepos", "C:\\gitrepos"} {
 		if fileInfos, _ = ioutil.ReadDir(repoBaseDirPath); len(fileInfos) > 0 {
 			for _, fi := range fileInfos {
 				if dirName = fi.Name(); fi.IsDir() {
-					if srcDirPath = ugo.GopathSrcGithub("metaleap", dirName); !uio.DirExists(srcDirPath) {
-						srcDirPath = ugo.GopathSrcGithub("go3d", dirName)
+					for _, githubName := range repoDirs {
+						if srcDirPath = ugo.GopathSrcGithub(githubName, dirName); uio.DirExists(srcDirPath) {
+							break
+						}
 					}
 					if dirPath = filepath.Join(repoBaseDirPath, dirName); uio.DirExists(srcDirPath) {
 						if err = uio.ClearDirectory(dirPath, ".git"); err != nil {
@@ -62,24 +67,18 @@ func copyToRepos() (err error) {
 func main() {
 	var err error
 	dirTmpSkipper.AddPatterns("_tmp")
-	print("DropBox?... ")
-	if pushToDropBox {
-		if err = copyToDropbox(); err != nil {
-			panic(err)
+	push := func(msg string, push bool, pusher func() error) {
+		print(msg)
+		if push {
+			if err = pusher(); err != nil {
+				panic(err)
+			} else {
+				println("YUP.")
+			}
 		} else {
-			println("YUP.")
+			println("NOPE.")
 		}
-	} else {
-		println("NOPE.")
 	}
-	print("GitHub?... ")
-	if pushToGitRepos {
-		if err = copyToRepos(); err != nil {
-			panic(err)
-		} else {
-			println("YUP.")
-		}
-	} else {
-		println("NOPE.")
-	}
+	push("DropBox?... ", pushToDropBox, copyToDropbox)
+	push("GitHub?... ", pushToGitRepos, copyToRepos)
 }
