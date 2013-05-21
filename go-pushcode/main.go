@@ -19,13 +19,13 @@ var (
 
 func copyToDropbox() (err error) {
 	const dbp = "Dropbox/dev-go"
-	dropboxDirs := []string{"metaleap", "go3d", "openbase", "prox"}
+	dropboxDirs := []string{"metaleap", "go3d", "openbase", "proxsite"}
 	for _, dropDirPath := range []string{filepath.Join("Q:", dbp), filepath.Join(ugo.UserHomeDirPath(), dbp)} {
 		if uio.DirExists(dropDirPath) {
 			if err = uio.ClearDirectory(dropDirPath); err == nil {
 				for _, githubName := range dropboxDirs {
-					if err = uio.CopyAll(ugo.GopathSrcGithub(githubName), filepath.Join(dropDirPath, githubName), &dirTmpSkipper); err == nil {
-						break
+					if err = uio.CopyAll(ugo.GopathSrcGithub(githubName), filepath.Join(dropDirPath, githubName), &dirTmpSkipper); err != nil {
+						return
 					}
 				}
 			}
