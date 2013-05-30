@@ -49,7 +49,7 @@ func copyToRepos() (err error) {
 		dirName, dirPath, srcDirPath string
 		fileInfos                    []os.FileInfo
 	)
-	repoDirs := []string{"metaleap", "go3d", "goforks", "openbase"}
+	repoDirs := []string{"metaleap", "go3d", "openbase"}
 	for _, repoBaseDirPath := range []string{"Q:\\gitrepos", "C:\\gitrepos"} {
 		if fileInfos, _ = ioutil.ReadDir(repoBaseDirPath); len(fileInfos) > 0 {
 			for _, fi := range fileInfos {
