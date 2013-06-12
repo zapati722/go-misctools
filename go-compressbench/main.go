@@ -70,7 +70,7 @@ func testComp(name string, wm writerMaker, rm readerMaker) {
 
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
-	uio.NewDirWalker(false, nil, func(_ *uio.DirWalker, fullPath string, _ os.FileInfo) bool {
+	uio.NewDirWalker(false, nil, func(fullPath string) bool {
 		blobs = append(blobs, uio.ReadBinaryFile(fullPath, true))
 		return true
 	}).Walk(dirPath)
