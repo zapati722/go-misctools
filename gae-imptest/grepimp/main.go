@@ -9,6 +9,7 @@ import (
 
 	ugo "github.com/metaleap/go-util"
 	uio "github.com/metaleap/go-util/io"
+	usl "github.com/metaleap/go-util/slice"
 )
 
 func main() {
@@ -23,7 +24,8 @@ func main() {
 			if filepath.Ext(fullPath) == ".go" {
 				if relPath := filepath.Clean(filepath.Dir(fullPath)[len(*dir):]); !m[relPath] {
 					m[relPath] = true
-					if relPath = strings.Trim(filepath.ToSlash(relPath), "/"); relPath != "syscall" && relPath != "unsafe" && relPath != "builtin" && relPath != "runtime/race" && relPath != "net/http" && !(strings.Contains(relPath, "/testdata") || strings.Contains(relPath, "appengine_internal")) {
+					ban := []string{"syscall", "unsafe", "net/http", "builtin", "go/format", "net/http/cookiejar", "net/http/fcgi"}
+					if relPath = strings.Trim(filepath.ToSlash(relPath), "/"); !(usl.StrHas(ban, relPath) || strings.HasPrefix(relPath, "os/") || strings.HasPrefix(relPath, "runtime/") || strings.Contains(relPath, "/testdata") || strings.Contains(relPath, "appengine_internal")) {
 						file.WriteString(fmt.Sprintf("\t_ %#v\n", relPath))
 					}
 				}
