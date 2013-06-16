@@ -151,11 +151,11 @@ import (
 
 	_ "github.com/metaleap/go-util"
 
-	// _ "github.com/metaleap/go-util/empty_for_testing"
+	_ "github.com/metaleap/go-util/empty_for_testing"
 
-	// _ "github.com/metaleap/go-util/num"
+	_ "github.com/metaleap/go-util/num"
 
-	// _ "github.com/metaleap/go-util/gfx" // --> imps go-util/num
+	_ "github.com/metaleap/go-util/gfx" // --> imps go-util/num
 
 	_ "github.com/metaleap/go-util/hash"
 
@@ -163,11 +163,11 @@ import (
 
 	_ "github.com/metaleap/go-util/slice/sort"
 
-	// _ "github.com/metaleap/go-util/str" // --> imps go-util & go-util/slice
+	_ "github.com/metaleap/go-util/str" // --> imps go-util & go-util/slice
 
-	// _ "github.com/metaleap/go-util/io" // --> imps go-util/str
+	_ "github.com/metaleap/go-util/io" // --> imps go-util/str
 
-	// _ "github.com/metaleap/go-util/net" // --> imps go-util/io
+	_ "github.com/metaleap/go-util/net" // --> imps go-util/io
 )
 
 func init() {
