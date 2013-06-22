@@ -142,32 +142,30 @@ import (
 	_ "unicode/utf8"
 
 	_ "github.com/go-forks/blackfriday"
+	_ "github.com/go-forks/tga"
 	_ "github.com/go-forks/toml"
+	_ "github.com/go-forks/xmlx"
 	_ "github.com/gorilla/context"
 	_ "github.com/gorilla/mux"
 
-	//	KEEP lines in between the following metaleap/go-util imps
+	//	KEEP empty lines in between the following metaleap/go-util imps
 	//	for dependency-sorting instead of alphabetical
 
-	_ "github.com/metaleap/go-util"
+	_ "github.com/go-utils/ugo"
 
-	_ "github.com/metaleap/go-util/empty_for_testing"
+	_ "github.com/go-utils/uhash"
 
-	_ "github.com/metaleap/go-util/num"
+	// _ "github.com/go-utils/uslice"
 
-	_ "github.com/metaleap/go-util/gfx" // --> imps go-util/num
+	// _ "github.com/go-utils/ustr" // --> imps ugo & uslice
 
-	_ "github.com/metaleap/go-util/hash"
+	// _ "github.com/go-utils/ufs" // --> imps ustr
 
-	_ "github.com/metaleap/go-util/slice"
+	// _ "github.com/go-utils/unet" // --> imps ufs
 
-	_ "github.com/metaleap/go-util/slice/sort"
+	// _ "github.com/go-utils/unum"
 
-	_ "github.com/metaleap/go-util/str" // --> imps go-util & go-util/slice
-
-	_ "github.com/metaleap/go-util/io" // --> imps go-util/str
-
-	_ "github.com/metaleap/go-util/net" // --> imps go-util/io
+	// _ "github.com/go-utils/ugfx" // --> imps go-util/num
 )
 
 func init() {
