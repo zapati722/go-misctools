@@ -8,9 +8,9 @@ import (
 	"runtime"
 	"sync"
 
-	ugo "github.com/metaleap/go-util"
-	uio "github.com/metaleap/go-util/io"
-	ustr "github.com/metaleap/go-util/str"
+	"github.com/go-utils/ugo"
+	"github.com/go-utils/uio"
+	"github.com/go-utils/ustr"
 )
 
 var (
@@ -23,7 +23,7 @@ var (
 
 func copyToDropbox() (err error) {
 	const dbp = "Dropbox/dev-go"
-	dropboxDirs := []string{"metaleap", "go3d", "go-forks", "openbase", "go-leansites"}
+	dropboxDirs := []string{"metaleap", "go3d", "go-forks", "go-utils", "openbase", "go-leansites"}
 	for _, dropDirPath := range []string{filepath.Join("Q:", dbp), filepath.Join(ugo.UserHomeDirPath(), dbp)} {
 		if uio.DirExists(dropDirPath) {
 			if err = uio.ClearDirectory(dropDirPath); err == nil {
@@ -49,7 +49,7 @@ func copyToRepos() (err error) {
 		dirName, dirPath, srcDirPath string
 		fileInfos                    []os.FileInfo
 	)
-	repoDirs := []string{"metaleap", "go3d", "openbase"}
+	repoDirs := []string{"metaleap", "go3d", "openbase", "go-utils"}
 	for _, repoBaseDirPath := range []string{"Q:\\gitrepos", "C:\\gitrepos"} {
 		if fileInfos, _ = ioutil.ReadDir(repoBaseDirPath); len(fileInfos) > 0 {
 			for _, fi := range fileInfos {
