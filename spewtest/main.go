@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/goforks/go-spew/spew"
+	"github.com/go-forks/go-spew/spew"
 
 	u3d "github.com/go3d/go-3dutil"
 )

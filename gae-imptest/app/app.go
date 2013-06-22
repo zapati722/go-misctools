@@ -141,8 +141,8 @@ import (
 	_ "unicode/utf16"
 	_ "unicode/utf8"
 
-	_ "github.com/goforks/blackfriday"
-	_ "github.com/goforks/toml"
+	_ "github.com/go-forks/blackfriday"
+	_ "github.com/go-forks/toml"
 	_ "github.com/gorilla/context"
 	_ "github.com/gorilla/mux"
 

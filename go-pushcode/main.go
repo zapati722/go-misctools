@@ -23,7 +23,7 @@ var (
 
 func copyToDropbox() (err error) {
 	const dbp = "Dropbox/dev-go"
-	dropboxDirs := []string{"metaleap", "go3d", "goforks", "openbase", "go-leansites"}
+	dropboxDirs := []string{"metaleap", "go3d", "go-forks", "openbase", "go-leansites"}
 	for _, dropDirPath := range []string{filepath.Join("Q:", dbp), filepath.Join(ugo.UserHomeDirPath(), dbp)} {
 		if uio.DirExists(dropDirPath) {
 			if err = uio.ClearDirectory(dropDirPath); err == nil {
