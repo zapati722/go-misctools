@@ -8,8 +8,8 @@ import (
 	"runtime"
 	"sync"
 
+	"github.com/go-utils/ufs"
 	"github.com/go-utils/ugo"
-	"github.com/go-utils/uio"
 	"github.com/go-utils/ustr"
 )
 
@@ -25,14 +25,14 @@ func copyToDropbox() (err error) {
 	const dbp = "Dropbox/dev-go"
 	dropboxDirs := []string{"metaleap", "go3d", "go-forks", "go-utils", "openbase", "go-leansites"}
 	for _, dropDirPath := range []string{filepath.Join("Q:", dbp), filepath.Join(ugo.UserHomeDirPath(), dbp)} {
-		if uio.DirExists(dropDirPath) {
-			if err = uio.ClearDirectory(dropDirPath); err == nil {
+		if ufs.DirExists(dropDirPath) {
+			if err = ufs.ClearDirectory(dropDirPath); err == nil {
 				for _, githubName := range dropboxDirs {
 					wg.Add(1)
 					go func(dropDirPath, githubName string) {
 						defer wg.Done()
 						dst := filepath.Join(dropDirPath, githubName)
-						if err := uio.CopyAll(ugo.GopathSrcGithub(githubName), dst, &dirTmpSkipper); err != nil {
+						if err := ufs.CopyAll(ugo.GopathSrcGithub(githubName), dst, &dirTmpSkipper); err != nil {
 							log.Printf("Error @ %s:\t%+v", dst, err)
 						}
 					}(dropDirPath, githubName)
@@ -55,17 +55,17 @@ func copyToRepos() (err error) {
 			for _, fi := range fileInfos {
 				if dirName = fi.Name(); fi.IsDir() {
 					for _, githubName := range repoDirs {
-						if srcDirPath = ugo.GopathSrcGithub(githubName, dirName); uio.DirExists(srcDirPath) {
+						if srcDirPath = ugo.GopathSrcGithub(githubName, dirName); ufs.DirExists(srcDirPath) {
 							break
 						}
 					}
-					if dirPath = filepath.Join(repoBaseDirPath, dirName); uio.DirExists(srcDirPath) {
+					if dirPath = filepath.Join(repoBaseDirPath, dirName); ufs.DirExists(srcDirPath) {
 						wg.Add(1)
 						go func(dirPath, srcDirPath string) {
 							defer wg.Done()
 							var err error
-							if err = uio.ClearDirectory(dirPath, ".git"); err == nil {
-								err = uio.CopyAll(srcDirPath, dirPath, &dirTmpSkipper)
+							if err = ufs.ClearDirectory(dirPath, ".git"); err == nil {
+								err = ufs.CopyAll(srcDirPath, dirPath, &dirTmpSkipper)
 							}
 							if err != nil {
 								log.Printf("Error @ %s:\t%+v", dirPath, err)
