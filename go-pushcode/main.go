@@ -84,20 +84,21 @@ func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	dirTmpSkipper.AddPatterns("_tmp")
 	push := func(msg string, push bool, pusher func() error) {
-		log.Println(msg)
+		defer wg.Done()
 		if push {
 			if err = pusher(); err != nil {
 				panic(err)
 			} else {
-				log.Println("YUP.")
+				log.Println(msg + "YUP.")
 			}
 		} else {
-			log.Println("NOPE.")
+			log.Println(msg + "NOPE.")
 		}
 	}
-	push("DropBox?... ", pushToDropBox, copyToDropbox)
-	push("GitHub?... ", pushToGitRepos, copyToRepos)
+	wg.Add(2)
 	log.Println("Waiting...")
+	go push("DropBox?... ", pushToDropBox, copyToDropbox)
+	go push("GitHub?... ", pushToGitRepos, copyToRepos)
 	wg.Wait()
 	log.Println("...all done.")
 }
