@@ -10,12 +10,11 @@ import (
 	"io"
 	"io/ioutil"
 	"math"
-	"os"
 	"runtime"
 	"time"
 
-	ugo "github.com/metaleap/go-util"
-	uio "github.com/metaleap/go-util/io"
+	"github.com/go-utils/ufs"
+	"github.com/go-utils/ugo"
 )
 
 type writerMaker func(w io.Writer) io.WriteCloser
@@ -69,9 +68,9 @@ func testComp(name string, wm writerMaker, rm readerMaker) {
 }
 
 func main() {
-	runtime.GOMAXPROCS(runtime.NumCPU())
-	uio.NewDirWalker(false, nil, func(fullPath string) bool {
-		blobs = append(blobs, uio.ReadBinaryFile(fullPath, true))
+	ugo.MaxProcs()
+	ufs.NewDirWalker(false, nil, func(fullPath string) bool {
+		blobs = append(blobs, ufs.ReadBinaryFile(fullPath, true))
 		return true
 	}).Walk(dirPath)
 

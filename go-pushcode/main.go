@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"runtime"
 	"sync"
 
 	"github.com/go-utils/ufs"
@@ -81,7 +80,7 @@ func copyToRepos() (err error) {
 
 func main() {
 	var err error
-	runtime.GOMAXPROCS(runtime.NumCPU())
+	ugo.MaxProcs()
 	dirTmpSkipper.AddPatterns("_tmp")
 	push := func(msg string, push bool, pusher func() error) {
 		defer wg.Done()
