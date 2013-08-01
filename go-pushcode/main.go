@@ -22,7 +22,7 @@ var (
 
 func copyToDropbox() (err error) {
 	const dbp = "Dropbox/dev-go"
-	dropboxDirs := []string{"metaleap", "go3d", "go-forks", "go-utils", "openbase", "go-leansites"}
+	dropboxDirs := []string{"metaleap", "go3d", "go-forks", "go-utils", "go-geo", "openbase", "go-leansites"}
 	for _, dropDirPath := range []string{filepath.Join("Q:", dbp), filepath.Join(ugo.UserHomeDirPath(), dbp)} {
 		if ufs.DirExists(dropDirPath) {
 			if err = ufs.ClearDirectory(dropDirPath); err == nil {
@@ -48,7 +48,7 @@ func copyToRepos() (err error) {
 		dirName, dirPath, srcDirPath string
 		fileInfos                    []os.FileInfo
 	)
-	repoDirs := []string{"metaleap", "go3d", "openbase", "go-utils"}
+	repoDirs := []string{"metaleap", "go3d", "openbase", "go-utils", "go-geo"}
 	for _, repoBaseDirPath := range []string{"Q:\\gitrepos", "C:\\gitrepos"} {
 		if fileInfos, _ = ioutil.ReadDir(repoBaseDirPath); len(fileInfos) > 0 {
 			for _, fi := range fileInfos {
